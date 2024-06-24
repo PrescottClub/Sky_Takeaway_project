@@ -42,4 +42,9 @@ public class Employee implements Serializable {
 
     private Long updateUser;
 
+    public void setUpdateUserId(long l) {
+    }
+
+    public void setCreateUserId(long l) {
+    }
 }
