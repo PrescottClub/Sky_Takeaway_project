@@ -18,10 +18,11 @@ public interface EmployeeMapper {
 
     /**
      * 插入员工信息
-     * @param employee
+     *
+     * @param employee 员工实体
      */
-    @Insert("insert into employee (name, username, password, phone, sex, id_number, create_time, update_time, create_user, update_user, status) " +
-            "values " +
+    @Insert("INSERT INTO employee (name, username, password, phone, sex, id_number, create_time, update_time, create_user, update_user, status) " +
+            "VALUES " +
             "(#{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{status})")
     void insert(Employee employee);
 }

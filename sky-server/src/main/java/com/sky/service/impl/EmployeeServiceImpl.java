@@ -19,7 +19,7 @@ import org.springframework.util.DigestUtils;
 import java.time.LocalDateTime;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;

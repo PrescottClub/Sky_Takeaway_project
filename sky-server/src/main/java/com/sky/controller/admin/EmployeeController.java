@@ -26,7 +26,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
-public class   EmployeeController {
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
@@ -44,6 +44,10 @@ public class   EmployeeController {
         log.info("员工登录：{}", employeeLoginDTO);
 
         Employee employee = employeeService.login(employeeLoginDTO);
+
+        if (employee == null) {
+            return Result.error(0, "账号不存在或密码错误");
+        }
 
         //登录成功后，生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
@@ -78,8 +82,24 @@ public class   EmployeeController {
     @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO) {
         log.info("新增员工：{}", employeeDTO);
+
+        // 生成默认密码
+        if (employeeDTO.getPassword() == null || employeeDTO.getPassword().isEmpty()) {
+            String defaultPassword = generateDefaultPassword();
+            employeeDTO.setPassword(defaultPassword);
+        }
+
         employeeService.save(employeeDTO);
-        return null;
+        return Result.success();
     }
 
+    /**
+     * 生成默认密码的方法
+     *
+     * @return
+     */
+    private String generateDefaultPassword() {
+        // 这里可以使用更复杂的生成逻辑，例如随机生成一个强密码
+        return "defaultPassword123"; // 示例默认密码，可以根据需要修改
+    }
 }
