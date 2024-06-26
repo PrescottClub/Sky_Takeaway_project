@@ -1,16 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl extends EmployeeService {
@@ -62,9 +67,9 @@ public class EmployeeServiceImpl extends EmployeeService {
     }
 
     /**
-     * 员工登录
+     * 新增员工
+     *
      * @param employeeDTO
-     * @return
      */
     public void save(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
@@ -81,13 +86,36 @@ public class EmployeeServiceImpl extends EmployeeService {
         employee.setUpdateTime(LocalDateTime.now());
 
         //设置当前记录创建人id和修改人id
-
         employee.setCreateUserId(BaseContext.getCurrentId());
         employee.setUpdateUserId(BaseContext.getCurrentId());
 
-
         employeeMapper.insert(employee);
-
     }
 
+    /**
+     * 分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        // 设置分页参数
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+
+        // 执行查询
+        List<Employee> employees = employeeMapper.pageQuery(employeePageQueryDTO);
+
+        // 创建PageInfo对象
+        PageInfo<Employee> pageInfo = new PageInfo<>(employees);
+
+        // 获取总记录数
+        long total = pageInfo.getTotal();
+
+        // 获取当前页的记录列表
+        List<Employee> records = pageInfo.getList();
+
+        // 封装结果并返回
+        return new PageResult(total, records);
+    }
 }

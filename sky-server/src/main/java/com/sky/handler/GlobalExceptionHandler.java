@@ -33,17 +33,14 @@ public class GlobalExceptionHandler {
      * @return 处理结果
      */
     @ExceptionHandler
-    public Result exceptionHandler(SQLIntegrityConstraintViolationException ex) {
-        // 获取异常消息
+    public Result exceptionHandler(SQLIntegrityConstraintViolationException ex){
         String message = ex.getMessage();
-        if (message.contains("Duplicate entry")) {
-            // 如果异常消息包含 "Duplicate entry"，则表示有重复的条目
+        if(message.contains("Duplicate entry")){
             String[] split = message.split(" ");
-            String username = split[2]; // 获取重复的用户名
-            String msg = username + MessageConstant.ALREADY_EXISTS; // 构造错误信息
-            return Result.error(msg); // 返回错误结果
-        } else {
-            // 如果不是重复条目错误，返回一个通用的错误信息
+            String username = split[2];
+            String msg = username + MessageConstant.ALREADY_EXISTS;
+            return Result.error(msg);
+        }else{
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
     }

@@ -2,8 +2,10 @@ package com.sky.service;
 
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +50,17 @@ public class EmployeeService {
         employee.setStatus(1); // 假设状态为 1 表示正常
 
         employeeMapper.insert(employee);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+
+        return null;
     }
 }
